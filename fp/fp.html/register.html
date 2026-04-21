@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="register.html">Register</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+    <h2>Event Registration</h2>
+
+    <form id="form">
+        <input type="text" id="name" placeholder="Enter Name" required>
+        <input type="email" id="email" placeholder="Enter Email" required>
+
+        <select id="event">
+            <option value="">Select Event</option>
+            <option>Tech Fest</option>
+            <option>Workshop</option>
+            <option>Seminar</option>
+        </select>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p id="success"></p>
+
+    <ul id="list"></ul>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
