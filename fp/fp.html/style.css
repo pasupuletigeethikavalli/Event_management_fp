@@ -66,3 +66,35 @@ button:hover {
     margin-top:10px;
     text-align:center;
 }
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    color: #333;
+    word-wrap: break-word;
+}
+
+th {
+    background: #f3f3f3;
+}
+
+.admin-container {
+    width: min(850px, 95%);
+}
+
+.logout {
+    margin-top: 20px;
+    background: #e74c3c;
+}

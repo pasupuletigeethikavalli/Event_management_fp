@@ -2,43 +2,65 @@ const form = document.getElementById("form");
 const list = document.getElementById("list");
 const success = document.getElementById("success");
 
-// Load saved data
-window.onload = function() {
-    let data = JSON.parse(localStorage.getItem("users")) || [];
-    data.forEach(user => addUser(user));
-};
+async function loadRegistrations() {
+    list.innerHTML = '';
+    try {
+        const response = await fetch('/api/students');
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
+        data.forEach(user => addUser(user));
+    } catch (error) {
+        const data = JSON.parse(localStorage.getItem('users')) || [];
+        data.forEach(user => addUser(user));
+    }
+}
 
-form.addEventListener("submit", function(e){
+window.onload = loadRegistrations;
+
+form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let event = document.getElementById("event").value;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const event = document.getElementById('event').value;
 
-    if(event === ""){
-        success.innerText = "⚠️ Select event!";
-        success.style.color = "red";
+    if (!event) {
+        success.innerText = '⚠️ Select event!';
+        success.style.color = 'red';
         return;
     }
 
-    let user = {name, email, event};
+    const user = { name, email, event };
 
-    // Save to localStorage
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
 
-    addUser(user);
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.error || 'Registration failed');
+        }
 
-    success.innerText = "✅ Registered Successfully!";
-    success.style.color = "green";
+        addUser(user);
+        success.innerText = '✅ Registered Successfully!';
+        success.style.color = 'green';
 
-    form.reset();
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push(user);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        form.reset();
+    } catch (error) {
+        success.innerText = `⚠️ ${error.message}`;
+        success.style.color = 'red';
+    }
 });
 
-// Add user to UI
-function addUser(user){
-    let li = document.createElement("li");
+function addUser(user) {
+    const li = document.createElement('li');
     li.innerText = `${user.name} (${user.email}) - ${user.event}`;
     list.appendChild(li);
 }
